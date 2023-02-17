@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ScriptRope : MonoBehaviour
@@ -11,12 +9,11 @@ public class ScriptRope : MonoBehaviour
         _hinge = GetComponent<HingeJoint2D>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (Input.GetKey(bundle))
         {
-            _hinge.breakForce = 0;
+            _hinge.enabled = false;
         }
     }
 }
