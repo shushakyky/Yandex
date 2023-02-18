@@ -3,7 +3,7 @@ using UnityEngine;
 public class ScriptRope : MonoBehaviour
 {
     private HingeJoint2D _hinge;
-    public KeyCode bundle;
+    public KeyCode pop;
     private void Start()
     {
         _hinge = GetComponent<HingeJoint2D>();
@@ -11,9 +11,10 @@ public class ScriptRope : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(bundle))
+        if (Input.GetKey(pop))
         {
             _hinge.enabled = false;
+            _hinge.connectedBody = null;
         }
     }
 }
