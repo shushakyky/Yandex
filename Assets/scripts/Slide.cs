@@ -5,6 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Slide : MonoBehaviour
 {
+    private const float MinMoveDistance = 0.001f;
+    private const float ShellRadius = 0.01f;
+
     [SerializeField] private float _minGroundNormalY = .65f;
     [SerializeField] private float _gravityModifier = 1f;
     [SerializeField] private Vector2 _velocity;
@@ -20,29 +23,34 @@ public class Slide : MonoBehaviour
     private RaycastHit2D[] _hitBuffer = new RaycastHit2D[16];
     private List<RaycastHit2D> _hitBufferList = new List<RaycastHit2D>(16);
 
-    private const float MinMoveDistance = 0.001f;
-    private const float ShellRadius = 0.01f;
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawRay(transform.position, _groundNormal * 10);
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(transform.position, Vector2.Perpendicular(_groundNormal * 10));
+    }
 
-    void OnEnable()
+    private void OnEnable()
     {
         _rb2d = GetComponent<Rigidbody2D>();
     }
 
-    void Start()
+    private void Start()
     {
         _contactFilter.useTriggers = false;
         _contactFilter.SetLayerMask(_layerMask);
         _contactFilter.useLayerMask = true;
     }
 
-    void Update()
+    private void Update()
     {
         Vector2 alongSurface = Vector2.Perpendicular(_groundNormal);
-
         _targetVelocity = alongSurface * _speed;
+        Debug.Log(_targetVelocity);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         _velocity += _gravityModifier * Physics2D.gravity * Time.deltaTime;
         _velocity.x = _targetVelocity.x;
@@ -50,8 +58,17 @@ public class Slide : MonoBehaviour
         _grounded = false;
 
         Vector2 deltaPosition = _velocity * Time.deltaTime;
-        Vector2 moveAlongGround = new Vector2(_groundNormal.y, -_groundNormal.x);
+        Vector2 moveAlongGround = new Vector2(_groundNormal.y, _groundNormal.x);
         Vector2 move = moveAlongGround * deltaPosition.x;
+
+        if (_groundNormal.x > 0)
+        {
+            move.x *= -1;
+        }
+        else if (_groundNormal.x < 0)
+        {
+            move.y *= -1;
+        }
 
         Movement(move, false);
 
@@ -90,6 +107,7 @@ public class Slide : MonoBehaviour
                 }
 
                 float projection = Vector2.Dot(_velocity, currentNormal);
+                
                 if (projection < 0)
                 {
                     _velocity = _velocity - projection * currentNormal;
@@ -101,5 +119,6 @@ public class Slide : MonoBehaviour
         }
 
         _rb2d.position = _rb2d.position + move.normalized * distance;
+
     }
 }
