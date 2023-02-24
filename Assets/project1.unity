@@ -995,9 +995,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d89d2f05af61bf42b9808a998d8219e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _jump: 15
   _minGroundNormalY: 0.65
-  _gravityModifier: 1
-  _velocity: {x: 0, y: 0}
+  _gravityModifier: 2
+  _velocity: {x: 20, y: 0}
   _layerMask:
     serializedVersion: 2
     m_Bits: 2147483647

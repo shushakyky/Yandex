@@ -8,6 +8,7 @@ public class Slide : MonoBehaviour
     private const float MinMoveDistance = 0.001f;
     private const float ShellRadius = 0.01f;
 
+    [SerializeField] private float _jump;
     [SerializeField] private float _minGroundNormalY = .65f;
     [SerializeField] private float _gravityModifier = 1f;
     [SerializeField] private Vector2 _velocity;
@@ -45,9 +46,16 @@ public class Slide : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (_grounded)
+            {
+                _velocity += _groundNormal * _jump;
+            }
+        }
+
         Vector2 alongSurface = Vector2.Perpendicular(_groundNormal);
         _targetVelocity = alongSurface * _speed;
-        Debug.Log(_targetVelocity);
     }
 
     private void FixedUpdate()
