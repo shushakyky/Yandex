@@ -7,6 +7,7 @@ public class a_bundle_with_a_rope : MonoBehaviour
 
     private HingeJoint2D _hinge;
     private string __tag;
+    public KeyCode bundle;
 
     private void Awake()
     {
@@ -16,12 +17,15 @@ public class a_bundle_with_a_rope : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D a)
     {
-        if (a.gameObject.tag != __tag)
+        if (Input.GetKey(bundle))
         {
-            Rigidbody2D next_hinge = a.gameObject.GetComponent<Rigidbody2D>();
-            _hinge.connectedBody = next_hinge;
-            _hinge.enabled = true;
-            __tag = a.gameObject.tag;
+            if (a.gameObject.tag != __tag)
+            {
+                Rigidbody2D next_hinge = a.gameObject.GetComponent<Rigidbody2D>();
+                _hinge.connectedBody = next_hinge;
+                _hinge.enabled = true;
+                __tag = a.gameObject.tag;
+            }
         }
     }
 
